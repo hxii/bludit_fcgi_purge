@@ -1,0 +1,7 @@
+{
+    "plugin-data":
+    {
+        "name": "FastCGI Cache Cleaner",
+        "description": "This plugin uses <strong>ngx_cache_purge</strong> to clean FCGI cache once a page is modified or deleted."
+    }
+}
