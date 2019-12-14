@@ -43,18 +43,19 @@
 		}
 
 		public function afterPageModify() {
+			global $site;
 			$page       = $_POST[ 'key' ];
-			$parent     = $_POST[ 'parent' ];
+			$parent     = ( $_POST[ 'parent' ] ) ?? '';
 			$tags       = ( ! empty( $_POST[ 'tags' ] ) ) ? explode( ',', $_POST[ 'tags' ] ) : '';
 			$category   = $_POST[ 'category' ];
 			$this->purge( $page );
 			if ( $this->getValue( 'purge_tags' ) && ! empty( $tags ) ) {
 				foreach ( $tags as $tag ) {
-					$this->purge( $tag );
+					$this->purge( $site->getField('uriTag') . $tag );
 				}
 			}
 			if ( $this->getValue( 'purge_category' ) && ! empty( $category ) ) {
-				$this->purge( $category );
+				$this->purge( $site->getField('uriCategory') . $category );
 			}
 			if ( $this->getValue( 'purge_index' ) ) {
 				$this->purge( '' );
@@ -68,12 +69,12 @@
 			$this->purge();
 		}
 
-		public function purge( $key ) {
+		public function purge( $key = '' ) {
 			$format = $this->parse_format( $this->getValue( 'purge_format' ), $key );
 			$purge = file_get_contents( $format );
 		}
 
-		private function parse_format( string $format, string $key ) {
+		private function parse_format( string $format, string $key = '' ) {
 			global $site;
 			$dict = array(
 				'@siteurl' => $site->url(),
